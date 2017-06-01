@@ -1,3 +1,4 @@
+
 //Trinket pins assignament:
 #define RXDATA      3      // Pin 3, not used
 #define TXDATA      4      // Pin 4, USB out
@@ -10,7 +11,7 @@
 #include <SoftwareSerial.h>
 SoftwareSerial usbSerial(RXDATA, TXDATA);
 
-int i;                                  //Counter
+int i;                                  //Counters
 int32_t data, buff;                     //Storage of data
 
 void setup()
@@ -28,9 +29,16 @@ void loop()
   while (digitalRead(CLOCK))
   {
   }
-  digitalWrite(LED,HIGH);
+
   dataGrab();             //This was notably more complex - could be inline
-  digitalWrite(LED,LOW);
+
+  if(usbSerial.read()!=-1)
+      {
+        digitalWrite(LED,HIGH);
+        dataSend();
+        digitalWrite(LED,LOW);
+      }
+      
 }
 
 
@@ -56,8 +64,12 @@ void dataGrab()
     {
     }    
   }
-  usbSerial.print(data);        //Spit data over USB
-  usbSerial.print("\n");
 }
 
+
+void dataSend()
+  {
+    usbSerial.print(data);        //Spit data over USB
+    usbSerial.print("\n");
+  }
 
